@@ -12,8 +12,8 @@
   "antiInbox": false,
   "language": "en",
   "notesLanguage": "change language using ISO 639-1 code",
-  "nickNameBot": "𝐘𝐎𝐔𝐑 ♲︎︎︎ 𝐁𝐁𝐙 ♡︎♥︎",
-  "prefix": "✓",
+  "nickNameBot": "⏤͟͟͞͞𝐊𝐚𝐥☺︎ 𝐍𝐚𝐠𝐢𝐧━━ᥫ᭡💋🐍",
+  "prefix": "-",
   "adminOnly": {
     "enable": false,
     "ignoreCommand": []
@@ -34,7 +34,8 @@
   "whiteListMode": {
     "enable": false,
     "whiteListIds": [
-      "61589546816594"
+      "61589546816594",
+      "61584785056263"
     ],
     "notes": "If enabled, only IDs in whiteListIds can use the bot."
   },
