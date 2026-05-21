@@ -4,7 +4,7 @@ const { writeFileSync } = require("fs-extra");
 module.exports = {
 	config: {
 		name: "admin",
-		alias: ["operator"],
+		alias: ["abal"],
 		version: "2.2",
 		author: "〲MAMUNツ࿐ T.T　o.O",
 		countDown: 5,
@@ -35,7 +35,7 @@ module.exports = {
 
 		// ✅ Owners (যারা add/remove করতে পারবে)
 		const OWNER = [
-			"61589546816594"
+			"61590172617870"
 		];
 
 		// ✅ Check: sender owner কিনা
