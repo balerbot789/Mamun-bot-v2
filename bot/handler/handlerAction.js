@@ -29,21 +29,35 @@ module.exports = (
   );
 
   return async function (event) {
-    // ✅ Anti-Inbox Protection
-    if (
-      global.GoatBot.config.antiInbox == true &&
-      (event.senderID == event.threadID ||
-        event.userID == event.senderID ||
-        event.isGroup == false) &&
-      (event.senderID || event.userID || event.isGroup == false)
-    )
-      return;
+
+    // =========================
+    // 🔐 ADMIN INBOX SYSTEM
+    // =========================
+    const adminIDs = global.GoatBot.config.adminBot || [];
+    const isAdmin = adminIDs.includes(event.senderID);
+
+    // 🚫 Only admins can use inbox
+    if (global.GoatBot.config.antiInbox === true) {
+      if (event.isGroup === false && !isAdmin) {
+        return;
+      }
+    }
 
     const message = createFuncMessage(api, event);
+
     await handlerCheckDB(usersData, threadsData, event);
 
-    const handlerChat = await handlerEvents(event, message);
+    let handlerChat;
+    try {
+      handlerChat = await handlerEvents(event, message);
+    } catch (err) {
+      console.error("❌ handlerEvents error:", err);
+      return;
+    }
+
     if (!handlerChat) return;
+
+    const safeCall = (fn) => typeof fn === "function" && fn();
 
     const {
       onAnyEvent,
@@ -59,36 +73,37 @@ module.exports = (
       read_receipt
     } = handlerChat;
 
-    onAnyEvent();
+    safeCall(onAnyEvent);
 
     switch (event.type) {
       case "message":
       case "message_reply":
       case "message_unsend":
-        onFirstChat();
-        onChat();
-        onStart();
-        onReply();
+        safeCall(onFirstChat);
+        safeCall(onChat);
+        safeCall(onStart);
+        safeCall(onReply);
         break;
 
       case "event":
-        handlerEvent();
-        onEvent();
+        safeCall(handlerEvent);
+        safeCall(onEvent);
         break;
 
       case "message_reaction":
-        onReaction();
+        safeCall(onReaction);
 
         // 💣 React-Unsend System
         try {
           const cfg = global.GoatBot.config.reactUnsend || {};
           const adminIDs = global.GoatBot.config.adminBot || [];
-          const isAdmin = adminIDs.includes(event.userID || event.senderID);
+          const reactorID = event.userID || event.senderID;
+          const isAdminReact = adminIDs.includes(reactorID);
 
           if (
             cfg.enable &&
             cfg.emojis?.includes(event.reaction) &&
-            (!cfg.onlyAdmin || isAdmin)
+            (!cfg.onlyAdmin || isAdminReact)
           ) {
             await api.unsendMessage(event.messageID);
           }
@@ -99,15 +114,15 @@ module.exports = (
         break;
 
       case "typ":
-        typ();
+        safeCall(typ);
         break;
 
       case "presence":
-        presence();
+        safeCall(presence);
         break;
 
       case "read_receipt":
-        read_receipt();
+        safeCall(read_receipt);
         break;
 
       default:
