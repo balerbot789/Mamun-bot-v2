@@ -874,7 +874,14 @@ async function startBot(_0x3cad9e) {
         };
       }
       await stopListening();
-      global.GoatBot.Listening = _0x4d5048.listenMqtt(_0xb703d8());
+      if (_0x4d5048.connectE2EE) {
+        try { await _0x4d5048.connectE2EE(); } catch(e) { log.warn("E2EE", e.message); }
+      }
+      if (_0x4d5048.listenE2EE) {
+        global.GoatBot.Listening = _0x4d5048.listenE2EE(_0xb703d8());
+      } else {
+        global.GoatBot.Listening = _0x4d5048.listenMqtt(_0xb703d8());
+      }
       global.GoatBot.callBackListen = _0x290401;
       if (global.GoatBot.config.serverUptime.enable == true && !global.GoatBot.config.dashBoard?.['enable'] && !global.serverUptimeRunning) {
         const _0x155439 = require("http");
@@ -917,7 +924,11 @@ async function startBot(_0x3cad9e) {
           try {
             await stopListening();
             await sleep(0x3e8);
-            global.GoatBot.Listening = _0x4d5048.listenMqtt(_0xb703d8());
+            if (_0x4d5048.listenE2EE) {
+              global.GoatBot.Listening = _0x4d5048.listenE2EE(_0xb703d8());
+            } else {
+              global.GoatBot.Listening = _0x4d5048.listenMqtt(_0xb703d8());
+            }
             log.info('LISTEN_MQTT', getText('login', 'restartListenMessage2'));
           } catch (_0x5e1259) {
             log.err('LISTEN_MQTT', getText('login', "restartListenMessageError"), _0x5e1259);
