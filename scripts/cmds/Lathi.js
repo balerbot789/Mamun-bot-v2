@@ -5,7 +5,7 @@ const path = require("path");
 
 module.exports = {
   config: {
-    name: "latti",
+    name: "lathi",
     aliases: ["lathi"],
     version: "1.2",
     author: "eden",
