@@ -4,7 +4,7 @@ module.exports = {
 		version: "1.0",
 		author: "〲MAMUNツ࿐",
 		countDown: 5,
-		role: 2,
+		role: 0,
 		shortDescription: "Broadcast notification",
 		longDescription: "Send notification to all groups and receive replies",
 		category: "admin",
