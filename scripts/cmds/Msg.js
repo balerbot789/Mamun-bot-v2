@@ -36,8 +36,9 @@ module.exports = {
 
 ${content}
 
-──────────────────────
-💬 𝗥𝗘𝗣𝗟𝗬 𝗧𝗢 𝗧𝗛𝗜𝗦 𝗧𝗜𝗖𝗞𝗘𝗧`,
+──────────────
+
+💬 𝗥𝗘𝗣𝗟𝗬 𝗧𝗢 𝗧𝗛𝗜𝗦 𝗠𝗘𝗦𝗦𝗔𝗚𝗘`,
 					tid,
 					(err, info) => {
 
@@ -89,7 +90,8 @@ ${content}
 			return api.sendMessage(
 				{
 					body:
-`📩 𝗡𝗘𝗪 𝗧𝗜𝗖𝗞𝗘𝗧
+`
+💬 𝗥𝗘𝗣𝗟𝗬 𝗠𝗘𝗦𝗦𝗔𝗚𝗘
 
 👤 𝗡𝗔𝗠𝗘 ➤ ${userName}
 🆔 𝗨𝗜𝗗 ➤ ${event.senderID}
@@ -97,7 +99,7 @@ ${content}
 🏘️ 𝗚𝗥𝗢𝗨𝗣 ➤ ${groupName}
 🆔 𝗧𝗜𝗗 ➤ ${event.threadID}
 
-──────────────────────
+───────────────
 💬 𝗠𝗘𝗦𝗦𝗔𝗚𝗘:
 ${event.body || "[Attachment]"}`,
 					attachment: attachments
@@ -134,7 +136,7 @@ ${event.body || "[Attachment]"}`,
 
 ${event.body || ""}
 
-──────────────────────
+────────────────
 𝗣𝗢𝗪𝗘𝗥𝗘𝗗 𝗕𝗬 𝗠𝗔𝗠𝗨𝗡`,
 					attachment: attachments
 				},
