@@ -3,58 +3,132 @@ const moment = require("moment-timezone");
 module.exports = {
   config: {
     name: "pending",
-    version: "2.3",
+    version: "3.0",
     author: "〲MAMUNⓇ︵爱",
     countDown: 5,
     role: 2,
-    shortDescription: { en: "Manage pending group requests" },
-    longDescription: { en: "Approve or refuse groups waiting for bot permission" },
+    shortDescription: {
+      en: "Manage pending group requests"
+    },
+    longDescription: {
+      en: "Approve or refuse groups waiting for bot permission"
+    },
     category: "owner"
   },
 
   langs: {
     en: {
-      invalid: "❌ Invalid selection: %1",
-      refused: "🚫 %1 group request refused\n⏰ Time: %2",
-      approved: "✅ %1 group successfully approved\n⏰ Time: %2",
-      fetchFail: "❌ Unable to load pending groups",
-      list: "🔔 PENDING GROUPS (%1)\n\n%2\n\n👉 Reply with number(s) to approve\n👉 Reply `c <number>` to cancel",
-      empty: "✅ No pending groups found"
+      invalid: "❌ 𝗜𝗻𝘃𝗮𝗹𝗶𝗱 𝘀𝗲𝗹𝗲𝗰𝘁𝗶𝗼𝗻: %1",
+
+      refused:
+        "🚫 𝗥𝗲𝗾𝘂𝗲𝘀𝘁 𝗥𝗲𝗷𝗲𝗰𝘁𝗲𝗱\n📦 𝗚𝗿𝗼𝘂𝗽𝘀: %1\n⏰ 𝗧𝗶𝗺𝗲: %2",
+
+      approved:
+        "✅ 𝗥𝗲𝗾𝘂𝗲𝘀𝘁 𝗔𝗽𝗽𝗿𝗼𝘃𝗲𝗱\n📦 𝗚𝗿𝗼𝘂𝗽𝘀: %1\n⏰ 𝗧𝗶𝗺𝗲: %2",
+
+      fetchFail:
+        "❌ 𝗨𝗻𝗮𝗯𝗹𝗲 𝘁𝗼 𝗹𝗼𝗮𝗱 𝗽𝗲𝗻𝗱𝗶𝗻𝗴 𝗴𝗿𝗼𝘂𝗽𝘀",
+
+      empty:
+        "✅ 𝗡𝗼 𝗽𝗲𝗻𝗱𝗶𝗻𝗴 𝗴𝗿𝗼𝘂𝗽𝘀 𝗳𝗼𝘂𝗻𝗱",
+
+      list:
+`╔════════════╗
+   𝗣𝗘𝗡𝗗𝗜𝗡𝗚
+╚════════════╝
+
+📦 𝗧𝗼𝘁𝗮𝗹 𝗥𝗲𝗾𝘂𝗲𝘀𝘁𝘀 : %1
+
+━━━━━━━━━━━━━━
+
+%2
+
+━━━━━━━━━━━━━━
+
+✅ 𝗔𝗽𝗽𝗿𝗼𝘃𝗲 :
+➜ 1
+➜ 1 2 3
+
+🚫 𝗥𝗲𝗳𝘂𝘀𝗲 :
+➜ c 1
+➜ c 1 2 3
+
+━━━━━━━━━━━━━━
+👑 𝗢𝘄𝗻𝗲𝗿 𝗖𝗼𝗻𝘁𝗿𝗼𝗹 𝗣𝗮𝗻𝗲𝗹
+━━━━━━━━━━━━`
     }
   },
 
   onReply: async ({ api, event, Reply, getLang }) => {
-    if (event.senderID != Reply.author) return;
+    if (event.senderID != Reply.author)
+      return;
 
     const input = event.body.trim();
     const { threadID, messageID } = event;
-    const prefix = global.GoatBot?.config?.prefix || "-";
-    const botNickname = "☺︎ 𝐍𝐚𝐠𝐢𝐧━━ᥫ᭡💋🐍";
+
+    const prefix =
+      global.GoatBot?.config?.prefix || "-";
+
+    const botNickname =
+      "✨ 𝐍𝐚𝐠𝐢𝐧 ━━ᥫ᭡ 🐍";
+
     let done = 0;
 
     const dateTime = moment()
       .tz("Asia/Dhaka")
-      .format("ddd, YYYY-MMM-DD, HH:mm:ss");
+      .format("DD/MM/YYYY • hh:mm:ss A");
 
     if (/^(c|cancel)/i.test(input)) {
-      const nums = input.replace(/^(c|cancel)/i, "").trim().split(/\s+/);
+      const nums = input
+        .replace(/^(c|cancel)/i, "")
+        .trim()
+        .split(/\s+/);
 
       for (const n of nums) {
-        if (!Number(n) || n < 1 || n > Reply.queue.length)
-          return api.sendMessage(getLang("invalid", n), threadID, messageID);
+        if (
+          !Number(n) ||
+          n < 1 ||
+          n > Reply.queue.length
+        )
+          return api.sendMessage(
+            getLang("invalid", n),
+            threadID,
+            messageID
+          );
 
-        const targetThreadID = Reply.queue[n - 1].threadID;
+        const targetThreadID =
+          Reply.queue[n - 1].threadID;
 
         api.sendMessage(
-`╭─🚫 ACCESS DENIED 🚫─╮
-│ 🤖 Bot : Refused
-│ 🔗 Prefix : ${prefix}
-│ ⏰ Date/Time : ${dateTime}
-╰──────────────────╯`,
+`╔═════════════════════╗
+   🚫 𝗔𝗖𝗖𝗘𝗦𝗦 𝗗𝗘𝗡𝗜𝗘𝗗 🚫
+╚═════════════════════╝
+
+╭━━━━━━━━━━━━━━━━━━╮
+┃ 🔒 𝗦𝗘𝗖𝗨𝗥𝗜𝗧𝗬 𝗔𝗟𝗘𝗥𝗧
+╰━━━━━━━━━━━━━━━━━━╯
+
+➤ 𝗦𝘁𝗮𝘁𝘂𝘀 : 𝗥𝗲𝗷𝗲𝗰𝘁𝗲𝗱 ❌
+➤ 𝗣𝗿𝗲𝗳𝗶𝘅 : ${prefix}
+➤ 𝗧𝗶𝗺𝗲 : ${dateTime}
+
+━━━━━━━━━━━━━━━━━━
+⚠️ 𝗣𝗲𝗿𝗺𝗶𝘀𝘀𝗶𝗼𝗻 𝗡𝗼𝘁 𝗚𝗿𝗮𝗻𝘁𝗲𝗱
+👋 𝗕𝗼𝘁 𝗜𝘀 𝗟𝗲𝗮𝘃𝗶𝗻𝗴...
+━━━━━━━━━━━━━━━━━━`,
           targetThreadID
         );
 
-        await api.removeUserFromGroup(api.getCurrentUserID(), targetThreadID);
+        try {
+          await api.removeUserFromGroup(
+            api.getCurrentUserID(),
+            targetThreadID
+          );
+        }
+        catch (e) {
+          console.log(e);
+        }
+
         done++;
       }
 
@@ -66,26 +140,55 @@ module.exports = {
     }
 
     const nums = input.split(/\s+/);
-    for (const n of nums) {
-      if (!Number(n) || n < 1 || n > Reply.queue.length)
-        return api.sendMessage(getLang("invalid", n), threadID, messageID);
 
-      const targetThreadID = Reply.queue[n - 1].threadID;
-      const botID = api.getCurrentUserID();
+    for (const n of nums) {
+      if (
+        !Number(n) ||
+        n < 1 ||
+        n > Reply.queue.length
+      )
+        return api.sendMessage(
+          getLang("invalid", n),
+          threadID,
+          messageID
+        );
+
+      const targetThreadID =
+        Reply.queue[n - 1].threadID;
+
+      const botID =
+        api.getCurrentUserID();
 
       api.sendMessage(
-`╭─✨ SYSTEM GOAT ✨─╮
-│ 🤖 Bot : Activated
-│ 🔗 Prefix : ${prefix}
-│ ⏰ Date/Time : ${dateTime} 
-╰─✅ Access Granted─╯`,
+`╔══════════════════╗
+    ✨ 𝗡𝗔𝗚𝗜𝗡 𝗦𝗬𝗦𝗧𝗘𝗠 ✨
+╚══════════════════╝
+
+╭━━━━━━━━━━━━━━━━━━╮
+┃ 🤖 𝗕𝗢𝗧 𝗔𝗖𝗧𝗜𝗩𝗔𝗧𝗘𝗗
+╰━━━━━━━━━━━━━━━━━━╯
+
+➤ 𝗦𝘁𝗮𝘁𝘂𝘀 : 𝗢𝗻𝗹𝗶𝗻𝗲 🟢
+➤ 𝗣𝗿𝗲𝗳𝗶𝘅 : ${prefix}
+➤ 𝗧𝗶𝗺𝗲 : ${dateTime}
+
+━━━━━━━━━━━━━━━━━━
+🌸 𝗪𝗲𝗹𝗰𝗼𝗺𝗲 𝗧𝗼 𝗡𝗮𝗴𝗶𝗻 𝗕𝗼𝘁
+⚡ 𝗔𝗹𝗹 𝗖𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝗥𝗲𝗮𝗱𝘆
+🚀 𝗘𝗻𝗷𝗼𝘆 𝗬𝗼𝘂𝗿 𝗝𝗼𝘂𝗿𝗻𝗲𝘆
+━━━━━━━━━━━━━━━━━━`,
         targetThreadID
       );
 
       try {
-        await api.changeNickname(botNickname, targetThreadID, botID);
-      } catch (e) {
-        console.log(`Nickname set error for ${targetThreadID}: `, e);
+        await api.changeNickname(
+          botNickname,
+          targetThreadID,
+          botID
+        );
+      }
+      catch (e) {
+        console.log(e);
       }
 
       done++;
@@ -98,40 +201,83 @@ module.exports = {
     );
   },
 
-  onStart: async ({ api, event, getLang, commandName }) => {
-    const { threadID, messageID, senderID } = event;
-    let text = "";
-    let i = 1;
+  onStart: async ({
+    api,
+    event,
+    getLang,
+    commandName
+  }) => {
+    const {
+      threadID,
+      messageID,
+      senderID
+    } = event;
 
     try {
-      const other = await api.getThreadList(100, null, ["OTHER"]) || [];
-      const pending = await api.getThreadList(100, null, ["PENDING"]) || [];
+      const other =
+        await api.getThreadList(
+          100,
+          null,
+          ["OTHER"]
+        ) || [];
 
-      const groups = [...other, ...pending].filter(
-        t => t.isGroup && t.isSubscribed
+      const pending =
+        await api.getThreadList(
+          100,
+          null,
+          ["PENDING"]
+        ) || [];
+
+      const groups = [
+        ...other,
+        ...pending
+      ].filter(
+        t =>
+          t.isGroup &&
+          t.isSubscribed
       );
 
       if (!groups.length)
-        return api.sendMessage(getLang("empty"), threadID, messageID);
+        return api.sendMessage(
+          getLang("empty"),
+          threadID,
+          messageID
+        );
 
-      for (const g of groups)
-        text += `${i++}. ${g.name || "Unnamed Group"} → ${g.threadID}\n`;
+      let text = "";
+
+      groups.forEach(
+        (group, index) => {
+          text += `${index + 1}. ${group.name || "Unnamed Group"}\n🆔 ${group.threadID}\n\n`;
+        }
+      );
 
       api.sendMessage(
-        getLang("list", groups.length, text),
+        getLang(
+          "list",
+          groups.length,
+          text
+        ),
         threadID,
         (err, info) => {
-          global.GoatBot.onReply.set(info.messageID, {
-            commandName,
-            author: senderID,
-            queue: groups
-          });
+          global.GoatBot.onReply.set(
+            info.messageID,
+            {
+              commandName,
+              author: senderID,
+              queue: groups
+            }
+          );
         },
         messageID
       );
-
-    } catch (err) {
-      return api.sendMessage(getLang("fetchFail"), threadID, messageID);
+    }
+    catch (err) {
+      api.sendMessage(
+        getLang("fetchFail"),
+        threadID,
+        messageID
+      );
     }
   }
 };
